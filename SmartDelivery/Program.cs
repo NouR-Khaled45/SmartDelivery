@@ -3,6 +3,22 @@
     internal class Program
     {
         static void Main(string[] args)
+
+
+        //////////Part 01 : Theoretical Questions///////
+        #region 1
+        //a>>DeliveryAddress :value type not change
+        //b>>Customer  :reference type change
+        #endregion
+
+
+        #region 2
+        //a>> all fields is public :any one can edit
+        //no valdition
+        // no constructor
+
+        //b>> make fields private + public properties
+        #endregion
         {
             /////////////////////Part 02 : Practical///////////////
             #region 1
