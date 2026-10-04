@@ -2,22 +2,24 @@
 
 namespace SmartDelivery
 {
-    public struct DeliveryCenter
+    public class DeliveryCenter
     {
-        private Shipment[] shipments;
+        private const int MaxShipments = 20;
 
-        public DeliveryCenter()
+        private readonly Shipment?[] shipments = new Shipment?[MaxShipments];
+
+        public string CenterName { get; set; }
+
+        public DeliveryCenter(string centerName)
         {
-            shipments = new Shipment[10];
+            CenterName = string.IsNullOrWhiteSpace(centerName) ? "Unknown" : centerName;
         }
-
-      
-        public Shipment this[int index]
+        public Shipment? this[int index]
         {
             get
             {
                 if (index < 0 || index >= shipments.Length)
-                    return default;
+                    return null;
                 return shipments[index];
             }
             set
@@ -28,27 +30,26 @@ namespace SmartDelivery
             }
         }
 
-       
-        public Shipment this[string trackingCode]
+        public Shipment? this[string trackingCode]
         {
             get
             {
                 for (int i = 0; i < shipments.Length; i++)
                 {
-                    if (shipments[i].TrackingCode != null &&
-                        shipments[i].TrackingCode == trackingCode)
-                        return shipments[i];
+                    Shipment? s = shipments[i];
+                    if (s != null && s.TrackingCode == trackingCode)
+                        return s;
                 }
-                return default;
+                return null;
             }
         }
 
-       
+
         public bool AddShipment(Shipment shipment)
         {
             for (int i = 0; i < shipments.Length; i++)
             {
-                if (shipments[i].TrackingCode == null)   
+                if (shipments[i] == null)
                 {
                     shipments[i] = shipment;
                     return true;
@@ -56,8 +57,33 @@ namespace SmartDelivery
             }
             return false;
         }
+
+        public bool RemoveShipment(string trackingCode)
+        {
+            for (int i = 0; i < shipments.Length; i++)
+            {
+                Shipment? s = shipments[i];
+                if (s != null && s.TrackingCode == trackingCode)
+                {
+                    shipments[i] = null;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void PrintAllShipments()
+        {
+            for (int i = 0; i < shipments.Length; i++)
+            {
+                Shipment? s = shipments[i];
+                if (s == null)
+                    continue;
+                s.PrintShipment();
+                Console.WriteLine();
+                Console.WriteLine(new string('-', 40));
+                Console.WriteLine();
+            }
+        }
     }
-
-
 }
-
