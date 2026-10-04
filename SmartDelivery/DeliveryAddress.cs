@@ -3,9 +3,9 @@ namespace SmartDelivery
 {
     public struct DeliveryAddress
     {
-        public string City;
-        public string Street;
-        public int BuildingNumber;
+        public string City { get; set; }
+        public string Street { get; set; }
+        public int BuildingNumber { get; set; }
         public DeliveryAddress(string city, string street, int buildingNumber)
         {
             City = city;
@@ -14,7 +14,8 @@ namespace SmartDelivery
         }
         public string GetFullAddress()
         {
-            return $"{ City}  ,{ Street}, {BuildingNumber}";
+            return $"{BuildingNumber} {Street}, {City}";
         }
     }
+
 }
