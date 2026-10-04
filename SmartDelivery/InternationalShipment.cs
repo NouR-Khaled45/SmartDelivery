@@ -30,31 +30,38 @@ namespace SmartDelivery
         }
 
 
-        public decimal EstimatedCost
+        public override decimal EstimatedCost
         {
             get { return base.EstimatedCost + CustomsFee; }
         }
 
         public InternationalShipment(string trackingCode, string description,
-                                     decimal weight, decimal deliveryFee,
-                                     DeliveryAddress destination,
-                                     string destinationCountry, decimal customsFee)
-            : base(trackingCode, description, weight, deliveryFee, destination)
+                               decimal weight, decimal deliveryFee,
+                               string destinationCountry, decimal customsFee)
+      : base(trackingCode, description, weight, deliveryFee)
         {
             DestinationCountry = destinationCountry;
             CustomsFee = customsFee;
         }
 
 
-        protected override string TypeName
+        public override void PrintShipment()
         {
-            get { return "International Shipment"; }
+            Console.WriteLine("International Shipment");
+            Console.WriteLine();
+            Console.WriteLine($"Tracking Code       : {TrackingCode}");
+            Console.WriteLine($"Description         : {Description}");
+            Console.WriteLine($"Weight              : {Weight} KG");
+            Console.WriteLine($"Delivery Fee        : {DeliveryFee} EGP");
+            Console.WriteLine($"Destination Country : {DestinationCountry}");
+            Console.WriteLine($"Customs Fee         : {CustomsFee} EGP");
+            Console.WriteLine($"Estimated Cost      : {EstimatedCost} EGP");
         }
 
-        protected override void PrintExtraDetails()
+       
+        public virtual void GenerateCustomsReport()
         {
-            Console.WriteLine($"Destination Country: {DestinationCountry}");
-            Console.WriteLine($"Customs Fee: {CustomsFee} EGP");
+            Console.WriteLine($"Customs Report for {TrackingCode} - Country: {DestinationCountry}, Customs Fee: {CustomsFee} EGP");
         }
     }
 }

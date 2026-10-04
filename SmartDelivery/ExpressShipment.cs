@@ -18,29 +18,31 @@ namespace SmartDelivery
         }
 
 
-        public decimal EstimatedCost
+
+        public override decimal EstimatedCost
         {
             get { return base.EstimatedCost + ExtraFee; }
         }
 
         public ExpressShipment(string trackingCode, string description,
-                             decimal weight, decimal deliveryFee,
-                               DeliveryAddress destination, decimal extraFee)
-            : base(trackingCode, description, weight, deliveryFee, destination)
+                       decimal weight, decimal deliveryFee, decimal extraFee)
+    : base(trackingCode, description, weight, deliveryFee)
         {
             ExtraFee = extraFee;
         }
 
 
 
-        protected override string TypeName
+        public override void PrintShipment()
         {
-            get { return "Express Shipment"; }
-        }
-
-        protected override void PrintExtraDetails()
-        {
-            Console.WriteLine($"Extra Fee: {ExtraFee} EGP");
+            Console.WriteLine("Express Shipment");
+            Console.WriteLine();
+            Console.WriteLine($"Tracking Code : {TrackingCode}");
+            Console.WriteLine($"Description   : {Description}");
+            Console.WriteLine($"Weight        : {Weight} KG");
+            Console.WriteLine($"Delivery Fee  : {DeliveryFee} EGP");
+            Console.WriteLine($"Extra Fee     : {ExtraFee} EGP");
+            Console.WriteLine($"Estimated Cost: {EstimatedCost} EGP");
         }
     }
 }
