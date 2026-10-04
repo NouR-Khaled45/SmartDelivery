@@ -10,6 +10,7 @@ namespace SmartDelivery
 
         public string CenterName { get; set; }
 
+        public Driver? AssignedDriver { get; set; }
         public DeliveryCenter(string centerName)
         {
             CenterName = string.IsNullOrWhiteSpace(centerName) ? "Unknown" : centerName;
