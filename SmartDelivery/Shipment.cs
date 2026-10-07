@@ -5,7 +5,7 @@ namespace SmartDelivery
 
 
 
-    public class Shipment
+    public abstract class Shipment
     {
 
         private string trackingCode = "UNKNOWN";
@@ -61,17 +61,14 @@ namespace SmartDelivery
 
         new DeliveryAddress("Unknown", "Unknown", 0);
 
-        public virtual decimal EstimatedCost
-        {
-            get { return DeliveryFee + (Weight * 5); }
-        }
+        public abstract decimal EstimatedCost { get; }
 
-        public Shipment(string trackingCode)
+        protected Shipment(string trackingCode)
     : this(trackingCode, "Unknown", 1, 50)
         {
         }
 
-        public Shipment(string trackingCode, string description,
+        protected Shipment(string trackingCode, string description,
                         decimal weight, decimal deliveryFee)
         {
             TrackingCode = trackingCode;
@@ -95,16 +92,7 @@ namespace SmartDelivery
                 DeliveryFee = newFee;
         }
 
-        public virtual void PrintShipment()
-        {
-            Console.WriteLine("Shipment");
-            Console.WriteLine();
-            Console.WriteLine($"Tracking Code : {TrackingCode}");
-            Console.WriteLine($"Description   : {Description}");
-            Console.WriteLine($"Weight        : {Weight} KG");
-            Console.WriteLine($"Delivery Fee  : {DeliveryFee} EGP");
-            Console.WriteLine($"Estimated Cost: {EstimatedCost} EGP");
-        }
+        public abstract void PrintShipment();
     }
 }
 
