@@ -72,7 +72,17 @@ namespace SmartDelivery
             }
             return false;
         }
-
+        public void PrintTrackingStatuses()
+        {
+            for (int i = 0; i < shipments.Length; i++)
+            {
+                if (shipments[i] is ITrackable trackable)
+                {
+                    Console.WriteLine(trackable.GetTrackingStatus());
+                    Console.WriteLine();
+                }
+            }
+        }
         public void PrintAllShipments()
         {
             for (int i = 0; i < shipments.Length; i++)
