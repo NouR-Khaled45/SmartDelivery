@@ -15,8 +15,7 @@ internal class Program
         // c) Assign the Driver to the DeliveryCenter
         center.AssignedDriver = driver;
 
-        // d) Standard shipment
-        Console.WriteLine();
+       // a) Standard shipment
         Console.WriteLine("--- Standard Shipment ---");
         Console.Write("Tracking Code: ");
         string code1 = Console.ReadLine()!;
@@ -26,10 +25,11 @@ internal class Program
         decimal weight1 = Convert.ToDecimal(Console.ReadLine());
         Console.Write("Delivery Fee: ");
         decimal fee1 = Convert.ToDecimal(Console.ReadLine());
-
         StandardShipment standard = new StandardShipment(code1, desc1, weight1, fee1);
 
-        // e) Express shipment
+
+
+        // b) Express shipment
         Console.WriteLine();
         Console.WriteLine("--- Express Shipment ---");
         Console.Write("Tracking Code: ");
@@ -42,10 +42,9 @@ internal class Program
         decimal fee2 = Convert.ToDecimal(Console.ReadLine());
         Console.Write("Extra Fee: ");
         decimal extraFee = Convert.ToDecimal(Console.ReadLine());
-
         ExpressShipment express = new ExpressShipment(code2, desc2, weight2, fee2, extraFee);
 
-        // f) International shipment
+        // c) International shipment
         Console.WriteLine();
         Console.WriteLine("--- International Shipment ---");
         Console.Write("Tracking Code: ");
@@ -60,87 +59,70 @@ internal class Program
         string country = Console.ReadLine()!;
         Console.Write("Customs Fee: ");
         decimal customsFee = Convert.ToDecimal(Console.ReadLine());
-
         InternationalShipment international = new InternationalShipment(
             code3, desc3, weight3, fee3, country, customsFee);
 
-        // g) Add all shipments to the DeliveryCenter
-        if (
-        center.AddShipment(standard) &&
-        center.AddShipment(express) &&
-        center.AddShipment(international)
-        )
-            Console.WriteLine("Shipments Added Successfully.");
+        // d) Add all shipments to the DeliveryCenter
+        center.AddShipment(standard);
+        center.AddShipment(express);
+        center.AddShipment(international);
+        Console.WriteLine("Shipments Added Successfully.");
 
 
-
-        // h) Print all shipments using PrintAllShipments()
+        // e) Print all shipment details
         Console.WriteLine();
         Console.WriteLine(new string('=', 42));
         Console.WriteLine("Delivery Center");
         Console.WriteLine(new string('=', 42));
         Console.WriteLine();
-        Console.WriteLine($"Driver : {center.AssignedDriver?.Name}");
-        Console.WriteLine();
-        Console.WriteLine(new string('-', 42));
-        Console.WriteLine();
         center.PrintAllShipments();
         Console.WriteLine(new string('=', 42));
 
-        // i) DeliveryHelper for each shipment
+        // f) Tracking status of every shipment
         Console.WriteLine();
-        Console.WriteLine("Printing Using DeliveryHelper...");
+        Console.WriteLine("Tracking Status");
         Console.WriteLine();
-        DeliveryHelper.PrintShipmentDetails(standard);
-        Console.WriteLine("Standard Shipment Printed Successfully.");
-        Console.WriteLine();
-        DeliveryHelper.PrintShipmentDetails(express);
-        Console.WriteLine("Express Shipment Printed Successfully.");
-        Console.WriteLine();
-        DeliveryHelper.PrintShipmentDetails(international);
-        Console.WriteLine("International Shipment Printed Successfully.");
+        center.PrintTrackingStatuses();
         Console.WriteLine(new string('=', 42));
 
-        // j) Both versions of UpdateWeight() - values from the user
-        //Console.WriteLine();
-        //Console.WriteLine("Updating Weight...");
-        //Console.WriteLine();
-        //Console.WriteLine($"Original Weight : {standard.Weight} KG");
-
-        //Console.Write("Enter New Weight: ");
-        //decimal newWeight = Convert.ToDecimal(Console.ReadLine());
-        //standard.UpdateWeight(newWeight);
-        //Console.WriteLine($"Updated Weight : {standard.Weight} KG");
-
-
-
-        // k) Shipment[] with mixed types, printed in a loop
+        // g) Insurance cost of every shipment
         Console.WriteLine();
-        Console.WriteLine("Printing Using Shipment[]...");
+        Console.WriteLine("Insurance");
         Console.WriteLine();
-        Shipment[] shipments = { standard, express, international };
-        foreach (Shipment s in shipments)
+        Console.Write("Standard Shipment Insurance : ");
+        DeliveryReport.PrintInsurance(standard);
+        Console.Write("Express Shipment Insurance : ");
+        DeliveryReport.PrintInsurance(express);
+        Console.Write("International Shipment Insurance : ");
+        DeliveryReport.PrintInsurance(international);
+        Console.WriteLine(new string('=', 42));
+
+
+        // h) ITrackable[] array
+        Console.WriteLine();
+        Console.WriteLine("Using ITrackable[]...");
+        Console.WriteLine();
+        ITrackable[] trackables = { standard, express, international };
+        foreach (ITrackable t in trackables)
         {
-            s.PrintShipment();
-            Console.WriteLine();
+            DeliveryReport.PrintShipment(t);
         }
         Console.WriteLine(new string('=', 42));
 
-        // l) Sealed class and sealed method
 
-        //Console.WriteLine();
-        //CompletedShipment completed = new CompletedShipment("SH004", "Book", 1, 40);
-        //if (center.AddShipment(completed))
-        //    Console.WriteLine("Completed Shipment Added Successfully.");
-        //completed.PrintShipment();
+        // i) IInsurable[] array
+        Console.WriteLine();
+        Console.WriteLine("Using IInsurable[]...");
+        Console.WriteLine();
+        IInsurable[] insurables = { standard, express, international };
+        foreach (IInsurable i in insurables)
+        {
+            Console.Write("Insurance : ");
+            DeliveryReport.PrintInsurance(i);
+        }
+        Console.WriteLine(new string('=', 42));
 
-        //Console.WriteLine();
-        //PriorityInternationalShipment priority = new PriorityInternationalShipment(
-        //    "SH005", "Camera", 2, 150, "France", 80);
-        //if (center.AddShipment(priority))
-        //    Console.WriteLine("Priority International Shipment Added Successfully.");
-        //priority.PrintShipment();
-        //priority.GenerateCustomsReport();
-
+        Console.WriteLine();
+        Console.WriteLine("Interface Polymorphism Demonstrated Successfully.");
     }
 }
