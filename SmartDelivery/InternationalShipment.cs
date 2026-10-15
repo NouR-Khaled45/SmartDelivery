@@ -2,7 +2,7 @@
 namespace SmartDelivery
 {
 
-    public class InternationalShipment : Shipment
+    public class InternationalShipment : Shipment, ITrackable, IInsurable
     {
         private string destinationCountry = "Unknown";
         private decimal customsFee;
@@ -32,7 +32,7 @@ namespace SmartDelivery
 
         public override decimal EstimatedCost
         {
-            get { return base.EstimatedCost + CustomsFee; }
+            get { return DeliveryFee + (Weight * 5) + CustomsFee; }
         }
 
         public InternationalShipment(string trackingCode, string description,
@@ -58,7 +58,15 @@ namespace SmartDelivery
             Console.WriteLine($"Estimated Cost      : {EstimatedCost} EGP");
         }
 
-       
+        public string GetTrackingStatus()
+        {
+            return $"Shipment {TrackingCode} has been Delivered.";
+        }
+
+        public decimal CalculateInsurance()
+        {
+            return EstimatedCost * 0.12m;
+        }
         public virtual void GenerateCustomsReport()
         {
             Console.WriteLine($"Customs Report for {TrackingCode} - Country: {DestinationCountry}, Customs Fee: {CustomsFee} EGP");

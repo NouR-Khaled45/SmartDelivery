@@ -2,7 +2,7 @@
 namespace SmartDelivery
 {
 
-    public class ExpressShipment : Shipment
+    public class ExpressShipment : Shipment , ITrackable, IInsurable
     {
         private decimal extraFee;
 
@@ -21,8 +21,9 @@ namespace SmartDelivery
 
         public override decimal EstimatedCost
         {
-            get { return base.EstimatedCost + ExtraFee; }
+            get { return DeliveryFee + (Weight * 5) + ExtraFee; }
         }
+
 
         public ExpressShipment(string trackingCode, string description,
                        decimal weight, decimal deliveryFee, decimal extraFee)
@@ -30,7 +31,15 @@ namespace SmartDelivery
         {
             ExtraFee = extraFee;
         }
+        public string GetTrackingStatus()
+        {
+            return $"Shipment {TrackingCode} is Out for Delivery.";
+        }
 
+        public decimal CalculateInsurance()
+        {
+            return EstimatedCost * 0.08m;
+        }
 
 
         public override void PrintShipment()

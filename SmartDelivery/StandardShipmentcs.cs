@@ -1,13 +1,17 @@
 ﻿
 namespace SmartDelivery
 {
-    public class StandardShipment : Shipment
+    public class StandardShipment : Shipment, ITrackable, IInsurable
     {
 
         public StandardShipment(string trackingCode, string description,
                         decimal weight, decimal deliveryFee)
     : base(trackingCode, description, weight, deliveryFee)
         {
+        }
+        public override decimal EstimatedCost
+        {
+            get { return DeliveryFee + (Weight * 5); }
         }
         public override void PrintShipment()
         {
@@ -18,6 +22,16 @@ namespace SmartDelivery
             Console.WriteLine($"Weight        : {Weight} KG");
             Console.WriteLine($"Delivery Fee  : {DeliveryFee} EGP");
             Console.WriteLine($"Estimated Cost: {EstimatedCost} EGP");
+        }
+    
+       public string GetTrackingStatus()
+        {
+            return $"Shipment {TrackingCode} is Ready.";
+        }
+
+        public decimal CalculateInsurance()
+        {
+            return EstimatedCost * 0.05m;
         }
     }
 
