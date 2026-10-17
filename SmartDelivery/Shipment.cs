@@ -5,7 +5,7 @@ namespace SmartDelivery
 
 
 
-    public abstract class Shipment
+    public abstract partial class Shipment
     {
 
         private string trackingCode = "UNKNOWN";
@@ -56,7 +56,18 @@ namespace SmartDelivery
                     deliveryFee = value;
             }
         }
+        private static int totalShipmentsCreated;
 
+        static Shipment()
+        {
+            totalShipmentsCreated = 0;
+            Console.WriteLine("Shipment System Initialized");
+        }
+
+        public static int GetTotalShipmentsCreated()
+        {
+            return totalShipmentsCreated;
+        }
         public DeliveryAddress Destination { get; set; } =
 
         new DeliveryAddress("Unknown", "Unknown", 0);
@@ -75,8 +86,30 @@ namespace SmartDelivery
             Description = description;
             Weight = weight;
             DeliveryFee = deliveryFee;
+            totalShipmentsCreated++;
+        }
+        public Shipment ShallowCopy()
+        {
+            return (Shipment)MemberwiseClone();
         }
 
+        public Shipment DeepCopy()
+        {
+            Shipment copy = (Shipment)MemberwiseClone();
+            copy.Destination = new DeliveryAddress(
+                Destination.City, Destination.Street, Destination.BuildingNumber);
+            return copy;
+        }
+
+        public Shipment CopyShipment()
+        {
+            return DeepCopy();
+        }
+
+        partial void OnTrackingStatusChanged(string newStatus)
+        {
+            Console.WriteLine($"Tracking status changed to: {newStatus}");
+        }
         public void UpdateWeight(decimal newWeight)
         {
             Weight = newWeight;

@@ -30,8 +30,9 @@ namespace SmartDelivery
     : base(trackingCode, description, weight, deliveryFee)
         {
             ExtraFee = extraFee;
+            TrackingStatus = "Out For Delivery";
         }
-        public string GetTrackingStatus()
+        public override string GetTrackingStatus()
         {
             return $"Shipment {TrackingCode} is Out for Delivery.";
         }

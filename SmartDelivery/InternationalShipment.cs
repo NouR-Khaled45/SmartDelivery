@@ -42,6 +42,7 @@ namespace SmartDelivery
         {
             DestinationCountry = destinationCountry;
             CustomsFee = customsFee;
+            TrackingStatus = "Delivered";
         }
 
 
@@ -58,7 +59,7 @@ namespace SmartDelivery
             Console.WriteLine($"Estimated Cost      : {EstimatedCost} EGP");
         }
 
-        public string GetTrackingStatus()
+        public override string GetTrackingStatus()
         {
             return $"Shipment {TrackingCode} has been Delivered.";
         }

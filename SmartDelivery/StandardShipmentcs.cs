@@ -23,8 +23,8 @@ namespace SmartDelivery
             Console.WriteLine($"Delivery Fee  : {DeliveryFee} EGP");
             Console.WriteLine($"Estimated Cost: {EstimatedCost} EGP");
         }
-    
-       public string GetTrackingStatus()
+
+        public override string GetTrackingStatus()
         {
             return $"Shipment {TrackingCode} is Ready.";
         }
