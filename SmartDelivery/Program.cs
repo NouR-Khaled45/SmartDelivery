@@ -4,18 +4,17 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        // a) Create a Driver
-        Console.WriteLine("Enter Driver Name:");
-        Driver driver = new Driver(Console.ReadLine()!);
+        DeliveryUtilities.PrintSystemTitle();
+        Console.WriteLine();
 
-        // b) Create a DeliveryCenter
-        Console.WriteLine("Enter Delivery Center Name:");
-        DeliveryCenter center = new DeliveryCenter(Console.ReadLine()!);
+        
+        Console.WriteLine($"Shipments Created So Far : {Shipment.GetTotalShipmentsCreated()}");
+        Console.WriteLine();
 
-        // c) Assign the Driver to the DeliveryCenter
-        center.AssignedDriver = driver;
+        // ---------------- Creating Shipments ----------------
+        DeliveryUtilities.PrintSection("Creating Shipments...");
+        Console.WriteLine();
 
-       // a) Standard shipment
         Console.WriteLine("--- Standard Shipment ---");
         Console.Write("Tracking Code: ");
         string code1 = Console.ReadLine()!;
@@ -26,10 +25,8 @@ internal class Program
         Console.Write("Delivery Fee: ");
         decimal fee1 = Convert.ToDecimal(Console.ReadLine());
         StandardShipment standard = new StandardShipment(code1, desc1, weight1, fee1);
+        Console.WriteLine("Standard Shipment Created");
 
-
-
-        // b) Express shipment
         Console.WriteLine();
         Console.WriteLine("--- Express Shipment ---");
         Console.Write("Tracking Code: ");
@@ -43,8 +40,8 @@ internal class Program
         Console.Write("Extra Fee: ");
         decimal extraFee = Convert.ToDecimal(Console.ReadLine());
         ExpressShipment express = new ExpressShipment(code2, desc2, weight2, fee2, extraFee);
+        Console.WriteLine("Express Shipment Created");
 
-        // c) International shipment
         Console.WriteLine();
         Console.WriteLine("--- International Shipment ---");
         Console.Write("Tracking Code: ");
@@ -61,68 +58,121 @@ internal class Program
         decimal customsFee = Convert.ToDecimal(Console.ReadLine());
         InternationalShipment international = new InternationalShipment(
             code3, desc3, weight3, fee3, country, customsFee);
+        Console.WriteLine("International Shipment Created");
 
-        // d) Add all shipments to the DeliveryCenter
+        Console.WriteLine();
+        Console.WriteLine($"Total Shipments Created : {Shipment.GetTotalShipmentsCreated()}");
+        Console.WriteLine();
+
+        DeliveryCenter center = new DeliveryCenter("Cairo Center");
         center.AddShipment(standard);
         center.AddShipment(express);
         center.AddShipment(international);
-        Console.WriteLine("Shipments Added Successfully.");
 
-
-        // e) Print all shipment details
+        // ---------------- Object Copying ----------------
+        DeliveryUtilities.PrintSection("Object Copying");
         Console.WriteLine();
-        Console.WriteLine(new string('=', 42));
+
+        Shipment shipment1 = standard;
+        Shipment shipment2 = shipment1;         
+        Console.WriteLine($"Original Shipment  : {shipment1.TrackingCode}");
+        Console.WriteLine($"Assigned Shipment  : {shipment2.TrackingCode}");
+        Console.WriteLine();
+        Console.WriteLine($"Same Object : {ReferenceEquals(shipment1, shipment2)}");
+
+        Shipment actualCopy = shipment1.CopyShipment();   
+        Console.WriteLine($"Same Object (CopyShipment) : {ReferenceEquals(shipment1, actualCopy)}");
+        Console.WriteLine();
+
+        // ---------------- Shallow Copy ----------------
+        DeliveryUtilities.PrintSubSeparator();
+        Console.WriteLine("Shallow Copy");
+        DeliveryUtilities.PrintSubSeparator();
+        Console.WriteLine();
+
+        standard.Destination = new DeliveryAddress("Cairo", "Tahrir Street", 15);
+        Shipment shallow = standard.ShallowCopy();
+        Console.WriteLine($"Original Shipment Address : {standard.Destination.City}");
+        Console.WriteLine($"Copied Shipment Address   : {shallow.Destination.City}");
+        Console.WriteLine();
+       
+        shallow.Destination.City = "Giza";
+        Console.WriteLine();
+        Console.WriteLine($"Original Shipment Address : {standard.Destination.City}");
+        Console.WriteLine($"Copied Shipment Address   : {shallow.Destination.City}");
+        Console.WriteLine();
+        Console.WriteLine($"Same Shipment Object : {ReferenceEquals(standard, shallow)}");
+        Console.WriteLine($"Same DeliveryAddress Object : {ReferenceEquals(standard.Destination, shallow.Destination)}");
+        Console.WriteLine();
+
+        // ---------------- Deep Copy ----------------
+        DeliveryUtilities.PrintSubSeparator();
+        Console.WriteLine("Deep Copy");
+        DeliveryUtilities.PrintSubSeparator();
+        Console.WriteLine();
+
+        standard.Destination.City = "Cairo";      
+        Shipment deep = standard.DeepCopy();
+        Console.WriteLine($"Original Shipment Address : {standard.Destination.City}");
+        Console.WriteLine($"Copied Shipment Address   : {deep.Destination.City}");
+        Console.WriteLine();
+       
+        deep.Destination.City = "Giza";
+        Console.WriteLine();
+        Console.WriteLine($"Original Shipment Address : {standard.Destination.City}");
+        Console.WriteLine($"Copied Shipment Address   : {deep.Destination.City}");
+        Console.WriteLine();
+        Console.WriteLine($"Same Shipment Object : {ReferenceEquals(standard, deep)}");
+        Console.WriteLine($"Same DeliveryAddress Object : {ReferenceEquals(standard.Destination, deep.Destination)}");
+        Console.WriteLine();
+
+        // ---------------- Extension Methods ----------------
+        DeliveryUtilities.PrintSection("Extension Methods");
+        Console.WriteLine();
+        Console.WriteLine(standard.GetSummary());
+        Console.WriteLine(express.GetSummary());
+        Console.WriteLine(international.GetSummary());
+        Console.WriteLine();
+        Console.WriteLine($"{standard.TrackingCode} Is Delivered : {standard.IsDelivered()}");
+        Console.WriteLine($"{international.TrackingCode} Is Delivered : {international.IsDelivered()}");
+        Console.WriteLine();
+
+        // ---------------- Tracking Status ----------------
+        DeliveryUtilities.PrintSection("Tracking Status");
+        Console.WriteLine();
+        standard.UpdateTrackingStatus("Out For Delivery");
+        Console.WriteLine();
+
+        // ---------------- Static Utilities ----------------
+        DeliveryUtilities.PrintSection("Static Utilities");
+        Console.WriteLine();
+        DeliveryUtilities.PrintSubSeparator();
         Console.WriteLine("Delivery Center");
-        Console.WriteLine(new string('=', 42));
+        DeliveryUtilities.PrintSubSeparator();
+        Console.WriteLine();
+        Console.WriteLine($"Total Shipments Created : {Shipment.GetTotalShipmentsCreated()}");
+        Console.WriteLine();
+
+        // ---------------- Partial Method ----------------
+        DeliveryUtilities.PrintSection("Partial Method");
+        Console.WriteLine();
+        standard.UpdateTrackingStatus("Delivered");
+        Console.WriteLine();
+
+       
         Console.WriteLine();
         center.PrintAllShipments();
-        Console.WriteLine(new string('=', 42));
-
-        // f) Tracking status of every shipment
-        Console.WriteLine();
-        Console.WriteLine("Tracking Status");
+        Console.WriteLine("Tracking Status (ITrackable)");
         Console.WriteLine();
         center.PrintTrackingStatuses();
-        Console.WriteLine(new string('=', 42));
-
-        // g) Insurance cost of every shipment
-        Console.WriteLine();
-        Console.WriteLine("Insurance");
-        Console.WriteLine();
         Console.Write("Standard Shipment Insurance : ");
         DeliveryReport.PrintInsurance(standard);
         Console.Write("Express Shipment Insurance : ");
         DeliveryReport.PrintInsurance(express);
         Console.Write("International Shipment Insurance : ");
         DeliveryReport.PrintInsurance(international);
-        Console.WriteLine(new string('=', 42));
-
-
-        // h) ITrackable[] array
         Console.WriteLine();
-        Console.WriteLine("Using ITrackable[]...");
-        Console.WriteLine();
-        ITrackable[] trackables = { standard, express, international };
-        foreach (ITrackable t in trackables)
-        {
-            DeliveryReport.PrintShipment(t);
-        }
-        Console.WriteLine(new string('=', 42));
 
-
-        // i) IInsurable[] array
-        Console.WriteLine();
-        Console.WriteLine("Using IInsurable[]...");
-        Console.WriteLine();
-        IInsurable[] insurables = { standard, express, international };
-        foreach (IInsurable i in insurables)
-        {
-            Console.Write("Insurance : ");
-            DeliveryReport.PrintInsurance(i);
-        }
-        Console.WriteLine(new string('=', 42));
-
-        Console.WriteLine();
-        Console.WriteLine("Interface Polymorphism Demonstrated Successfully.");
+        
     }
 }
