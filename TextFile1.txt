@@ -1,0 +1,52 @@
+Q1: Object Copying
+
+a) Only the reference is copied,  both variables point  the same object.
+
+b) No still one object with two references.
+
+c) Copying object create new independent object, copying a reference, create another pointer to the same object
+
+///////////////////////////////////////////
+Q2: Shallow Copy vs Deep Copy
+
+a)  new object field values  copied from the original 
+
+b)  new object  referenced object  copied
+
+c)  copied as references, so the original and the copy share them.
+
+d)  copied into new objects, so the copy is independent.
+
+///////////////////////////////////////////////////////////
+
+Q3: Static Members
+
+a) A static field belongs to the class and is shared by all objects
+
+b) A method called using the class name. No, it can’t directly access instance members.
+
+c) It initializes static members and runs automatically once, before the first use of the class.
+
+d) A class with only static members. No,  can’t create an object from it
+///////////////////////////////////
+
+Q4: Extension Methods
+
+a) A method that adds functionality to an existing class without modifying it
+
+b) this
+
+c) In a static class
+
+d) No, only public members
+////////////////////////////
+
+Q5: Partial Classes and Partial Methods
+
+a) A class split across multiple files using partial
+
+b) To organize a big class and let several developers work on it
+
+c) A method declared in one part of the class and implemented in another.
+
+d) The compiler removes it and its calls, with no error.
